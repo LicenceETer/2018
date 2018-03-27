@@ -1,6 +1,7 @@
 +#!/bin/bash
 #
 # Creat Time :Thu 21 Nov 2013 10:42:16 PM GMT
+# Autoor     : licenceETer
 #this is my first shell on github
 
 cat > sed_change.txt << "EOF"
