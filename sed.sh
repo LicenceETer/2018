@@ -1,7 +1,7 @@
 +#!/bin/bash
 #
 # Creat Time :Thu 21 Nov 2013 10:42:16 PM GMT
-# Autoor     : lili
+#this is my first shell on github
 
 cat > sed_change.txt << "EOF"
 This is the header line.
