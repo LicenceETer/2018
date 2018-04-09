@@ -1,0 +1,46 @@
+在Python2和Python3中都提供print()方法来打印信息,但两个版本间的print稍微有差异
+
+主要体现在以下几个方面：
+
+1.python3中print是一个内置函数，有多个参数，而python2中print是一个语法结构；
+
+2.Python2打印时可以不加括号：print 'hello world'， Python3则需要加括号   print("hello world")
+
+3.Python2中，input要求输入的字符串必须要加引号，为了避免读取非字符串类型发生的一些行为，不得不使用raw_input()代替input()
+
+
+
+1. python3中，或许开发者觉得print同时具有两重身份有些不爽，就只留了其中函数的身份：
+
+[python] view plain copy
+print(value1, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+从上面的方法原型可以看出，
+
+①. print可以支持多个参数，支持同时打印多个字符串（其中...表示任意多个字符串）；
+
+②. sep表示多个字符串之间使用什么字符连接；
+
+③. end表示字符串结尾添加什么字符，指点该参数就可以轻松设置打印不换行，Python2.x下的print语句在输出字符串之后会默认换行，如果不希望换行，只要在语句最后加一个“，”即可。
+但是在Python 3.x下，print()变成内置函数，加“，”的老方法就行不通了。
+
+
+[python] view plain copy
+>>> print("python", "tab", ".com", sep='')
+pythontab.com
+>>> print("python", "tab", ".com", sep='', end='') #就可以实现打印出来不换行  
+pythontab.com
+
+2.Python2打印时可以不加括号：print 'hello world'， Python3则需要加括号   print("hello world")
+[python] view plain copy
+<span style="font-family:SimSun;font-size:14px;">>>> print 'pythontab.com'
+SyntaxError: Missing parentheses in call to 'print'</span>
+所以python3中print必须使用括号，因为它就是一个函数。
+
+3.Python2中input的坑
+
+[python] view plain copy
+<span style="font-size:14px;">print ("what do you like")
+a = input("Enter any content:")
+print ("i like",a)</span>
+
+输入字符串时会报错，而在python3中很好地解决了这个问题。

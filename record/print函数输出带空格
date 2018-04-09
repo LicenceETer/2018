@@ -1,0 +1,32 @@
+今天在做编程题的时候发现Python的print输出默认换行输出，并且输出后有空格。题目要求输出
+
+122
+
+而我的输出是：
+
+1
+
+2
+
+2
+
+于是我百度查到取消print自动换行的方法：就是在print的值后边加逗号，例如print x,
+
+果然，不换行了，但是输出结果仍然不对，要求输出为122，而我的输出为1 2 2
+
+于是我继续百度查方法，发现Python2和Python3的print方法是不同的。Python2的print不用加（）可以直接输出，例如print 'hello world'，
+Python3则需要加括号 print("hello world")，而且Python3的print方法是有参数的，比如sep表示字符串之间的连接符，end表示以什么结尾。
+如果没有设置参数默认sep=‘   ’，end='\n'，因此我把我的代码改为：
+
+print (i,end='')，但是我发现编译错误，因为我用的是Python2，跑Python2 的print是没有参数的，同理，如果在Python3中使用print x,这种逗号形式，也是编译错误的。
+
+继续百度查到：
+from __future__ import print_function
+只要在程序前加这个就可以在Python2中使用参数了。最后终于正确输出122
+后来，我又发现一种方法就是使用
+
+sys.stdout.write（）
+我把代码改为：
+
+sys.stdout.write(str(i))
+也能正确输出122
