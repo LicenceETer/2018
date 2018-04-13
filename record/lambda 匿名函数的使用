@@ -1,0 +1,22 @@
+Lambda就是一个匿名函数，有时候，要实现某个很简单函数，而且我们只会需要调用它一次，我们不愿意花时间去给给它取个名字，因为起名字是非常让人恼火的。
+这时候lambda就派上了用场。
+
+    比如要实现一个函数，该函数返回一个数的平方。
+      def f(x):     return x*x
+
+    如果你使用lambda表达式的话
+      lambda x:x*x
+
+    再比如要实现一个函数，这个函数可以求一个整数list中的所有元素的绝对值。
+      from functools import reduce
+      l = [1,2,3,5,-9,0,45,-99]
+      map(lambda x:abs(x),l)
+
+      再比如要取出一个整数list中所有为负数的元素
+      l = [1,2,3,5,-9,0,45,-99]
+      filter(lambda x:x < 0,l)
+
+      再比如要实现一个函数，这个函数可以求一个list中所有元素的和。
+      from functools import reduce
+      l = [1,2,3,5,-9,0,45,-99]
+      reduce(lambda x,y:x+y,l) 
