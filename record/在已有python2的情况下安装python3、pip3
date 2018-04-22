@@ -1,0 +1,123 @@
+前言：
+
+      python3应该是python的趋势所在，当然目前争议也比较大，这篇随笔的主要目的是记录在linux6.4下搭建python3环境的过程
+
+以及碰到的问题和解决过程。
+
+　　另外，如果本机安装了python2，尽量不要管他，使用python3运行python脚本就好，因为可能有程序依赖目前的python2环境，
+
+比如yum！！！！！
+
+不要动现有的python2环境！
+
+不要动现有的python2环境！
+
+不要动现有的python2环境！
+
+重要的使用说三遍！
+
+一、安装python3.5
+下载python3.5安装包：
+
+wget --no-check-certificate https://www.python.org/ftp/python/3.5.0/Python-3.5.0.tgz
+
+解压到当前目录：
+
+tar -zxvf Python-3.5.0.tgz
+
+cd Python-3.5.0
+
+./configure --prefix=/usr/local/python3.5 --enable-shared
+
+make & make install
+
+ln -s /usr/local/python3.5/bin/python3 /usr/bin/python3
+
+此时运行python3命令的话会报错，缺少.so文件，我们需要进行如下操作：
+
+cp -R /usr/local/python3.5/lib/* /usr/lib64/
+
+ok！此时python3的基础环境已经安装完成！
+
+二、安装pip以及setuptools
+毕竟丰富的第三方库是python的优势所在，为了更加方便的安装第三方库，使用pip命令，我们需要进行相应的安装。
+
+1、安装pip前需要前置安装setuptools
+wget --no-check-certificate  https://pypi.python.org/packages/source/s/setuptools/setuptools-19.6.tar.gz#md5=c607dd118eae682c44ed146367a17e26
+
+tar -zxvf setuptools-19.6.tar.gz
+
+cd setuptools-19.6
+
+python3 setup.py build
+
+python3 setup.py install
+
+报错：RuntimeError: Compression requires the (missing) zlib module
+
+我们需要在linux中安装zlib-devel包，进行支持。
+
+yum install zlib-devel
+
+需要对python3.5进行重新编译安装。
+
+cd python3.5
+
+make & make install
+
+又是漫长的编译安装过程。
+
+重新安装setuptools
+
+python3 setup.py build
+
+python3 setup.py install
+
+2、安装pip
+wget --no-check-certificate  https://pypi.python.org/packages/source/p/pip/pip-8.0.2.tar.gz#md5=3a73c4188f8dbad6a1e6f6d44d117eeb
+
+tar -zxvf pip-8.0.2.tar.gz
+
+cd pip-8.0.2
+
+python3 setup.py build
+
+python3 setup.py install
+
+如果没有意外的话，pip安装完成。
+
+4、缺少zlib
+wget http://zlib.net/zlib-1.2.8.tar.gz
+tar -xvf zlib-1.2.8.tar.gz
+cd zlib-1.2.8
+./configure
+make
+make install
+####安装zlib
+
+########重新编译python
+cd ../Python-3.4.5
+./configure --prefix=/usr/python3.4.5/
+make
+make install
+
+ln -s /usr/python3.4.5/bin/python3 /usr/bin/python3
+#####如果是第一次安装python，可以建立一个软连接，让python2和python可以同时使用，而且python还是原来的2.x。
+
+
+
+测试：
+
+我们使用pip安装一个python3第三方库：python3 -m pip install paramiko
+
+纳尼！！！！又报错了！
+
+ImportError: cannot import name 'HTTPSHandler'
+
+根据老衲多年的经验，应该是缺少openssl的开发环境，我们继续安装
+
+yum install openssl-devel
+
+继续重新编译安装python3.5
+
+ok，我们终于完成了整个python3环境的安装。
