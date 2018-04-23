@@ -1,0 +1,42 @@
+python-通过psutil监控系统性能
+
+一、 安装psutil
+通过easy_install安装psutil（注意：通过官方源码安装psutil的时候会报错，尚未查到原因及解决方法）
+easy_install psutil
+python3
+import psutil    #导入模块验证是否安装成功
+
+二、 监控cpu信息
+import psutil
+psutil.cpu_times()    #获取cpu（逻辑cpu的平均）占用时间的详细信息
+psutil.cpu_times(percpu=True)    #获取每个cpu占用时间的详细信息
+psutil.cpt_times().user    #获取用户进程占用cpu的时间（user+sys+idle+wait=total）
+
+三、 监控内存信息
+import psutil
+psutil.virtual_memory()    #获取内存信息
+psutil.virtual_memory().total    #获取内存总量
+psutil.swap_memory()    #获取swap信息
+psutil.swqp_memory()    #获取swap总量
+
+四、 监控磁盘信息
+import psutil
+psutil.disk_partitions()    #获取各分区的信息
+psutil.disk_usage()    #获取各分区的使用情况
+psutil.disk_io_counters(perdisk=True)    #获取各个分区的io情况
+psutil.disk_io_counters(perdisk=True)['sda1'].read_count    #获取sda1的io读取情况
+
+五、 监控网络信息
+import psutil
+psutil.net_io_counters()    #获取所有网络接口io信息
+psutil.net_io_counters(pernic=True)    #获取每个网络接口的io信息
+
+六、进程信息
+import psutil
+psutil.Process(pid)    #查看对应pid的进程信息
+psutil.Process(pid).username()    #查看是哪个用户创建的该进程
+psutil.Process(pid).cmdline()    #查看进程所在的路径
+
+七、 登录用户信息
+import psutil
+psutil.users()    #查看目前登录用户信

@@ -11,6 +11,8 @@ rrd = rrdtool.create('/python/HPC_Monitor/HPC.rrd','--step','300','--start',cur_
     'DS:eth0_in:COUNTER:600:0:U',
     'DS:eth0_out:COUNTER:600:0:U',
     'DS:disk_usage:GAUGE:600:0:U',
+    'DS:disk_read:COUNTER:600:0:U',
+    'DS:disk_write:COUNTER:600:0:U',
     'RRA:AVERAGE:0.5:1:600',
     'RRA:AVERAGE:0.5:6:700',
     'RRA:AVERAGE:0.5:24:775',
