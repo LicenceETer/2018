@@ -5,6 +5,7 @@ import psutil
 import time
 class cpu:
     usage = psutil.cpu_percent(1)
+    iowait = psutil.cpu_times().iowait
 
 class mem:
     m = psutil.virtual_memory()
@@ -17,7 +18,7 @@ class disk:
     d = psutil.disk_partitions()
     usage = psutil.disk_usage('/')
     read = psutil.disk_io_counters()[2]
-    write = psutil.disk_io_counters()[4]
+    write = psutil.disk_io_counters()[3]
     test = psutil.disk_io_counters()
 
 class network:
@@ -26,7 +27,7 @@ class network:
     total = input + output
 
 time.sleep(1)
-
+"""
 print('The cpu usage is : '),
 print(cpu.usage)
 print('The mem usage is : '),
@@ -39,4 +40,6 @@ print('The disk read is : '),
 print(disk.read),
 print(' the write is :'),
 print(disk.write)
-print(disk.test.read_bytes)
+print('the iowait is :'),
+print(cpu.iowait)
+"""

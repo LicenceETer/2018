@@ -4,6 +4,7 @@
 import rrdtool
 import time
 import Monitor
+import Smtp
 
 cpu_usage = Monitor.cpu.usage
 mem_usage = Monitor.mem.usage
@@ -27,3 +28,6 @@ if not update:
     raise error
     print('update ERROR')
 print(update)
+
+if men_usage >= 60 :
+    Smtp()
