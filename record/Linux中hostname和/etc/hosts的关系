@@ -1,0 +1,108 @@
+步骤
+uname -a (或者hostname)可以看到hostname，修改步骤如下：
+
+uname -a 查看hostname
+hostname newname 修改下，让hostname立刻生效。
+vi /etc/hosts 修改原hostname为 newname
+vi /etc/sysconfig/network 修改原hostname为
+newname , reboot重启后也生效
+reboot重启，uname -a 重新检查下。Done!
+
+解析
+临时生效
+Linux操作系统的 hostname是一个kernel变量，可以通过hostname命令来查看本机的hostname。
+
+[root@entel2 ~]# hostname
+entel2
+
+也可以直接cat /proc/sys/kernel/hostname查看。
+
+[root@entel2 ~]# cat /proc/sys/kernel/hostname
+entel2
+
+#hostname
+#cat /proc/sys/kernel/hostname
+
+上面两种输出结果相同。
+
+修改运行时Linux系统的hostname，即不需要重启系统
+hostname命令可以设置系统的hostname
+
+#hostname newname
+1
+newname即要设置的新的hostname，运行后立即生效，但是在系统重启后会丢失所做的修改，如果要永久更改系统的hostname，就要修改相关的设置文件。
+
+永久更改Linux的hostname
+man hostname里有这么一句话，
+
+The host name is usually set once at system startup in
+/etc/rc.d/rc.inet1 or /etc/init.d/boot (normally by reading the
+contents of a file which contains the host name, e.g. /etc/hostname).”
+
+这里写图片描述
+
+RedHat里没有这个文件，而是由/etc/rc.d/rc.sysinit这个脚本负责设置系统的hostname，它读取/etc/sysconfig/network这个文本文件，RedHat的hostname就是在这个文件里设置。
+
+所以，如果要永久修改RedHat的hostname，就修改/etc/sysconfig/network文件，将里面的HOSTNAME这一行修改成 HOSTNAME=NEWNAME，其中NEWNAME就是你要设置的hostname。
+
+Debian发行版的hostname的配置文件是/etc/hostname。
+
+修该配置文件后，重启系统就会读取配置文件设置新的hostname。
+
+hostname与/etc/hosts的关系
+很过人一提到更改hostname首先就想到修改/etc/hosts文件，认为hostname的配置文件就是/etc/hosts。其实不是的。
+
+hosts文件的作用相当如DNS，提供IP地址到hostname的对应。
+
+早期的互联网计算机少，单机hosts文件里足够存放所有联网计算机。
+
+不过随着互联网的发展，这就远远不够了。于是就出现了分布式的DNS系统。由DNS服务器来提供类似的IP地址到域名的对应。具体可以man hosts。
+
+Linux系统在向DNS服务器发出域名解析请求之前会查询/etc/hosts文件，如果里面有相应的记录，就会使用hosts里面的记录。/etc /hosts文件通常里面包含这一条记录
+
+127.0.0.1    localhost.localdomain   localhost
+
+hosts文件格式是一行一条记录，分别是IP地址 hostname aliases，三者用空白字符分隔，aliases可选。
+
+127.0.0.1到localhost这一条建议不要修改，因为很多应用程序会用到这个，比如sendmail，修改之后这些程序可能就无法正常运行。
+
+修改hostname后，如果想要在本机上用newhostname来访问，就必须在/etc/hosts文件里添加一条newhostname的记录。比如我的eth0的IP是192.168.123.201，我将hosts文件修改如下：
+
+#hostname xiaogongjiang
+# cat /etc/hosts
+127.0.0.1  localhost.localdomain localhost
+192.168.123.201    xiaogongjiang       blog
+
+这样，我就可以通过blog或者xiaogongjiang来访问本机。
+
+从上面这些来看，/etc/hosts于设置hostname是没直接关系的，仅仅当你要在本机上用新的hostname来访问自己的时候才会用到 /etc/hosts文件。两者没有必然的联系。
+
+RHEL还有个问题。
+
+我开始在测试的时候，只修改/etc/hosts，里面添加 192.168.123.201 xiaogongjiang blog，而/etc/sysconfig/network维持原状，也就是里面的HOSTNAME=localhost.localdomain。我重 启系统后居然发现hostname给修改成了xiaogongjiang 。这样看的话，倒真觉得/etc/hosts是hostname的配置文 件。后来终于在/etc/rc.d/rc.sysinit这个启动脚本里发现了问题的所在。
+
+rc.sysinit文件里一开始就设置了hostname
+
+if [ -f /etc/sysconfig/network ]; then
+. /etc/sysconfig/network
+fi
+if [ -z "$HOSTNAME" -o "$HOSTNAME" = "(none)" ]; then
+HOSTNAME=localhost
+fi
+
+确实使用了/etc/sysconfig/network里的hostname值。不过后面还有一段关于设置hostname的
+
+ipaddr=
+if [ "$HOSTNAME" = "localhost" -o "$HOSTNAME" = "localhost.localdomain" ]
+; then
+ipaddr=$(ip addr show to 0/0 scope global | awk '/[[:space:]]inet
+/ { print gensub("/.*","","g",$2) }')
+if [ -n "$ipaddr" ]; then
+eval $(ipcalc -h $ipaddr 2>/dev/null)
+hostname ${HOSTNAME}
+fi
+fi
+
+脚本判断hostname是否为localhost或者localhost.localdomain，如果是的话，将会使用接口IP地址对应的 hostname来重新设置系统的hostname。问题就出在这里，我的/etc/sysconfig/network默认的hostname是 localhost.localdomain，eth0的IP是192.168.123.201，而/etc/hosts里有192.168.123.201的记录。 于是就用192.168.123.201这条记录来替换了hostname。
+
+估计这也是很多人将/etc/hosts误以为是hostname的配置文件的原因。
