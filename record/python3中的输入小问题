@@ -1,0 +1,13 @@
+python3交互式界面特别不好用，删除不能正常使用，必须按Ctrl+删除键才可以，上下键重复命令也无法使用，左右调整光标也无法使用，这样调试代码效率很低，原因是python3缺少readline这个依赖
+
+因为readline依赖于ncurses库，如果没有这个库，编译readline的时候会提示can not find -lncurses，如果在centos环境下可以执行下面命令安装：
+
+yum -y install ncurses ncurses-devel
+
+安装ncurses库之后，再安装readline，readline可以在pypi下载，地址：https://pypi.python.org/pypi/readline，这里一定要下载源码包，其余的只能用于python2，下载之后执行下面命令安装：
+
+tar -xvzf readline-6.2.4.1.tar.gz
+cd readline-6.2.4.1/
+python3 setup.py install
+
+这样执行完毕就为python3安装了readline，然后再进入交互式界面所有的操作都好用了

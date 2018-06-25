@@ -1,0 +1,2 @@
+1.runserver 之后无法访问 400 ，提示You may need to add u'0.0.0.0' to ALLOWED_HOSTS
+  在目录setting.py中加入ALLOWED_HOSTS = ['198.211.99.20', 'localhost', '127.0.0.1'] 等允许的地址

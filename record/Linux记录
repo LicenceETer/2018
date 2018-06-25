@@ -3,3 +3,5 @@
 2.最小化安装CentOS 7 ， 发现nmcli / systemctl 等命令不能自动补全了
   yum install bash-completion.noarch
   and then relog to the terminal
+3.设置vim的tab键为4个空格
+  在/etc/vimrc中添加 set tabstop=4
