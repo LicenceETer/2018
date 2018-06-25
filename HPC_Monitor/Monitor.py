@@ -12,7 +12,7 @@ class mem:
     total = float(m.total)
     free = m.free
     used = float(m.used)
-    usage = (1.0-float(free/total))*100.0
+    usage = float(used/total)*100.0
 
 class disk:
     d = psutil.disk_partitions()
