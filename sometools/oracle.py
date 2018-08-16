@@ -1,15 +1,27 @@
+# -*- coding = utf-8 -*-
 import cx_Oracle as cx
 
 connect_info = {
     'user': 'c##test01',
     'password': 'test01',
-}
+    }
 
+conn = cx.connect(**connect_info)
+print(conn.version)
+cur = conn.cursor()
+sql = 'describe persons'
+cur.execute(sql)
+result = cur.fetchall()
+print(result)
 
+def get_table_stuc():
+    sql = 'select COLUMN_NAME,DATA_TYPE,DATA_LENGTH from user_tab_cols where Table_Name='PERSONS';'
+
+"""
 def get_database_list():
     conn = cx.connect(**connect_info)
     cur = conn.cursor()
-    sql = 'show user'
+    sql = 'select name from v$database'
     result = cur.execute(sql)
     database_list = list(map(lambda x: x[0], result))
     conn.close()
@@ -17,10 +29,10 @@ def get_database_list():
 
 
 def get_table_list(database):
-    connect_info.update({'database': database})
+    #connect_info.update({'database': database})
     conn = cx.connect(**connect_info)
     cur = conn.cursor()
-    sql = 'select tabel_name from '
+    sql = 'select table_name from user_tables'
     result = cur.execute(sql)
     table_list = list(map(lambda x: x[0], result))
     print(table_list)
@@ -70,7 +82,7 @@ def run():
     for i in range(len(database_list)):
         print(str(i + 1) + ':' + database_list[i], end='\t')
     from_database = database_list[int(input('\n')) - 1]
-    print('请输入来源数据库(输入序号):')
+    print('请输入目标数据库(输入序号):')
     for i in range(len(database_list)):
         print(str(i + 1) + ':' + database_list[i], end='\t')
     to_database = database_list[int(input('\n')) - 1]
@@ -87,3 +99,4 @@ def run():
 
 
 run()
+"""
