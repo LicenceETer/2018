@@ -5,19 +5,18 @@ connect_info = {
     'user': 'c##test01',
     'password': 'test01',
     }
-
+"""
 conn = cx.connect(**connect_info)
 print(conn.version)
 cur = conn.cursor()
-sql = 'describe persons'
-cur.execute(sql)
 result = cur.fetchall()
 print(result)
-
+"""
+"""
 def get_table_stuc():
     sql = 'select COLUMN_NAME,DATA_TYPE,DATA_LENGTH from user_tab_cols where Table_Name='PERSONS';'
-
 """
+
 def get_database_list():
     conn = cx.connect(**connect_info)
     cur = conn.cursor()
@@ -99,4 +98,3 @@ def run():
 
 
 run()
-"""
