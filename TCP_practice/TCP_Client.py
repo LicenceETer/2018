@@ -5,7 +5,7 @@ import socket
 import os
 
 target_host = "www.baidu.com"
-target_port = 80
+target_port = 9999
 request = "GET / HTTP/2.0\r\nHost: baidu.com\r\n\r\n"
 request = str.encode(request)
 
